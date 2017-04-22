@@ -1,0 +1,13 @@
+{
+	"env": {
+		"es6": true,
+			"node": false,
+			"browser": false,
+			"jquery": false,
+			"mocha": false,
+			"jasmine": false
+	},
+		"parserOptions": {
+			"sourceType": "module",
+		}
+}
