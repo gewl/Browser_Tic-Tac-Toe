@@ -1,7 +1,7 @@
 `use strict`
 
 import socketio from 'socket.io';
-import AI from '../ai'
+import AI from '../game_logic/ai.js'
 
 export default class SocketServer {
 	constructor(server) {
@@ -22,22 +22,11 @@ export default class SocketServer {
 		let desirableMoves = []
 
 		socket.on('clientPassState', state => {
-			let move = AI.move(state)
+			let ai = new AI()
+			let moveCoords = ai.move(state)
 
-			socket.emit('serverPassMove', move)
+			socket.emit('serverPassMove', { x: moveCoords[0], y: moveCoords[1] })
 		})
 	}
 
-}
-
-function generateRandomMove(state) {
-	let testX = Math.floor(Math.random() * 3)
-	let testY = Math.floor(Math.random() * 3)
-
-	while (state[testY][testX] != null) {
-		testX = Math.floor(Math.random() * 3)
-		testY = Math.floor(Math.random() * 3)
-	}
-
-	return { x: testX, y: testY }
 }

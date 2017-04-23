@@ -39,11 +39,12 @@ export default class Game {
 
 	// default parameter for piece to make passing moves back from server easier
 	move(x, y, piece = this.computerPiece) {
-		let { board, socket, handleWin, gameState } = this, boardWidth = gameState.length;
+		let { board, socket, handleWin, handleDraw, gameState } = this, boardWidth = gameState.length;
 		this.gameState[y][x] = piece
 		board.drawBoard()
 
 		// check for win after move made
+		// rows
 		for (let i = 0; i < boardWidth; i++) {
 			if (gameState[y][i] != piece) {
 				break;
@@ -53,6 +54,7 @@ export default class Game {
 			}
 		}
 
+		// columns
 		for (let i = 0; i < boardWidth; i++) {
 			if (gameState[i][x] != piece) {
 				break;
@@ -62,6 +64,7 @@ export default class Game {
 			}
 		}
 
+		// upper-left to bottom-right diagonal
 		if (x === y) { 
 			for (let i = 0; i < boardWidth; i++) {
 				if (gameState[i][i] != piece) {
@@ -74,6 +77,7 @@ export default class Game {
 			}
 		}
 
+		// upper-right to bottom-left diagonal
 		if (x + y === boardWidth-1) { 
 			for (let i = 0; i < boardWidth; i++) {
 				if (gameState[i][(boardWidth-1) - i] != piece) {
@@ -84,6 +88,12 @@ export default class Game {
 					handleWin(piece)
 				}
 			}
+		}
+
+		let areAvailableMoves = gameState.some(row => row.some(cell => !cell))
+
+		if (!areAvailableMoves) {
+			handleDraw()
 		}
 
 		if (!this.gameOver) {
@@ -103,6 +113,12 @@ export default class Game {
 		} else {
 			board.writeText("You lose!");
 		}
+	}
+
+	handleDraw() {
+		this.gameOver = true;
+
+		this.board.writeText("It's a draw!");
 	}
 
 	// used in case of redundant game starting from server
