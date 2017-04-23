@@ -5,14 +5,27 @@ import State from './state.js'
 // this (and other server-side game code) thanks in large part to
 // https://mostafa-samir.github.io/Tic-Tac-Toe-AI/
 
+function gameScore(state) {
+	if (state.terminal) {
+		if (state.winner === "player") {
+			return 10 - state.aiMovesCount
+		} else if (state.winner === "computer") {
+			return -10 + state.aiMovesCount
+		} else {
+			return 0
+		}
+	}
+}
+
 export default class AI {
-	constructor() {
-		this.turn = "O"
+	constructor(state) {
+		this.board = state
 	}
 
 	getMinimaxValue(state) {
+		console.log(state.board)
 		if (state.isTerminal()) {
-			return state.score()
+			return gameScore(state)
 		} else {
 			let stateScore
 
@@ -22,10 +35,12 @@ export default class AI {
 				stateScore = 1000
 			}
 
-			let availablePositions = state.emptyCells()
+			let availablePositions = state.getEmptyCells()
 
-			let availableNextStates = availablePositions.map(pos => { 
-				let action = new AIAction(pos);
+			let availableNextStates = availablePositions.map(coords => { 
+				let x = coords[0]
+				let y = coords[1]
+				let action = new AIAction(x, y);
 
 				let nextState = action.applyTo(state);
 
@@ -33,7 +48,7 @@ export default class AI {
 			})
 
 			availableNextStates.forEach(nextState => {
-				let nextScore = minimaxValue(nextState); //recursive call
+				let nextScore = this.getMinimaxValue(nextState); //recursive call
 
 				if (state.turn === "X") {
 					if (nextScore > stateScore) {
@@ -50,23 +65,33 @@ export default class AI {
 		}
 	}
 
-	move(board) {
-		let currentState = new State().transfer(0, "O", false, board)
+	move() {
+		let currentState = new State(0, "O", false, this.board)
+		// console.log(this.board)
 
 		let availableCells = currentState.getEmptyCells()
 
 		let availableActions = availableCells.map( coords => {
-			let action = new AIAction(coords)
+			let moveX = coords[0]
+			let moveY = coords[1]
+			let action = new AIAction(moveX, moveY) // creates action object
 
-			let next = action.applyTo(currentState)
+			let next = action.applyTo(currentState) // applies action to yield new state
 			action.minimaxVal = this.getMinimaxValue(next)
 
 			return action
 		})
 
-		availableActions.sort(AIAction.sortDescending)		
+		if (currentState.turn === "X") {
+			availableActions.sort(AIAction.sortDescending)		
+		} else {
+			availableActions.sort(AIAction.sortAscending)		
+		}
 
-		let chosenAction = availableActions[0].moveCoords
+		let chosenAction = {
+			x: availableActions[0].x,
+			y: availableActions[0].y
+		}
 
 		return chosenAction
 	}
@@ -78,21 +103,19 @@ export default class AI {
 
 export class AIAction {
 	// @param coords [Array]: [x, y]
-	constructor(coords) {
-		this.moveCoords = coords
+	constructor(x, y) {
+		this.x = x
+		this.y = y
 		this.minimaxVal = 0
 	}
 
 	applyTo (state) {
-		let next = new State();
-		let actionX = this.moveCoords[0]
-		let actionY = this.moveCoords[1]
+		let { x, y } = this
+		let next = new State(state.aiMovesCount, state.turn, state.terminal, state.board)
 
-		next.transfer(state.aiMovesCount, state.turn, state.terminal, state.board)
+		next.board[y][x] = next.turn;
 
-		next.board[actionY][actionX] = state.turn;
-
-		if(state.turn === "O") {
+		if (state.turn === "O") {
 			next.aiMovesCount++;
 		}
 

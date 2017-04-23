@@ -22,10 +22,10 @@ export default class SocketServer {
 		let desirableMoves = []
 
 		socket.on('clientPassState', state => {
-			let ai = new AI()
-			let moveCoords = ai.move(state)
+			let ai = new AI(state)	
+			let moveCoords = ai.move()
 
-			socket.emit('serverPassMove', { x: moveCoords[0], y: moveCoords[1] })
+			socket.emit('serverPassMove', moveCoords)
 		})
 	}
 

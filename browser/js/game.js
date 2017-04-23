@@ -7,7 +7,7 @@ export default class Game {
 		this.gameState = [
 			[ null, null, null ],
 			[ null, null, null ],
-			[ null, 'X', null ]
+			[ null, null, null ]
 		]
 
 		this.socket = new Socket(socketInstance, this);
@@ -99,8 +99,10 @@ export default class Game {
 		if (!this.gameOver) {
 			if (this.isPlayerTurn) {
 				socket.sendGameState(gameState)		
+				this.isPlayerTurn = false
+			} else {
+				this.isPlayerTurn = true
 			}
-			this.isPlayerTurn = !this.isPlayerTurn
 		}
 	}
 
