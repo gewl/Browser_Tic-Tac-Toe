@@ -33,14 +33,15 @@ export default class Game {
 		let { isPlayerTurn, playerPiece, board, gameOver } = this;
 		// check if legal move
 		if (!this.gameState[y][x] && isPlayerTurn && !gameOver) {
-			this.move(playerPiece, x, y)
+			this.move(x, y, playerPiece)
 		} 
 	}
 
-	move(piece, x, y) {
+	// default parameter for piece to make passing moves back from server easier
+	move(x, y, piece = this.computerPiece) {
+		let { board, socket, handleWin, gameState } = this, boardWidth = gameState.length;
 		this.gameState[y][x] = piece
 		board.drawBoard()
-		let { gameOver, handleWin, gameState } = this, boardWidth = gameState.length;
 
 		// check for win after move made
 		for (let i = 0; i < boardWidth; i++) {
@@ -85,8 +86,11 @@ export default class Game {
 			}
 		}
 
-		if (!gameOver) {
-			socket.sendGameState(gameState)		
+		if (!this.gameOver) {
+			if (this.isPlayerTurn) {
+				socket.sendGameState(gameState)		
+			}
+			this.isPlayerTurn = !this.isPlayerTurn
 		}
 	}
 

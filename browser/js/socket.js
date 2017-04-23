@@ -3,14 +3,14 @@ export default class Socket {
 		this.socket = socket
 		this.game = game;
 
-		socket.on('serverPassMove', moveObj => {
-			let { piece, x, y } = moveObj
-			setTimeout(() => this.game.move(piece, x, y), 1000)
+		socket.on('serverPassMove', move => {
+			let { x, y } = move
+			setTimeout(() => this.game.move(x, y), 1000)
 		})
 	}
 
 	sendGameState(gameState) {
-		this.socket.emit('clientPassBoard', gameState)
+		this.socket.emit('clientPassState', gameState)
 	}
 }
 

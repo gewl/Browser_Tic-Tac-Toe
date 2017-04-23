@@ -3,7 +3,7 @@
 import chalk from 'chalk';
 import express from 'express';
 const path = require('path');
-// import SocketServer from './sockets';
+import SocketServer from './sockets';
 
 const app = require('./app').default()
 
@@ -14,4 +14,4 @@ const server = app.listen(port, (err) => {
 });
 
 //instantiate socketServer which handles io
-//const socketServer = new SocketServer(server)
+const socketServer = new SocketServer(server)
