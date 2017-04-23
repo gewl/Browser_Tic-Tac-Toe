@@ -23,6 +23,7 @@ export default class Game {
 		this.gameOver = false;
 
 		this.handleWin = this.handleWin.bind(this)
+		this.handleDraw = this.handleDraw.bind(this)
 	}
 
 	getState() {
@@ -90,14 +91,10 @@ export default class Game {
 			}
 		}
 
-		let areAvailableMoves = gameState.some(row => row.some(cell => !cell))
-
-		if (!areAvailableMoves) {
-			handleDraw()
-		}
-
 		if (!this.gameOver) {
-			if (this.isPlayerTurn) {
+			if (!gameState.some(row => row.some(cell => !cell))) {
+				handleDraw()
+			} else if (this.isPlayerTurn) {
 				socket.sendGameState(gameState)		
 				this.isPlayerTurn = false
 			} else {

@@ -1,5 +1,4 @@
 `use strict`
-import _ from 'lodash'
 
 export default class State {
 	constructor(aiMovesCount = 0, turn = "X", terminal = false, board = []) {
@@ -9,23 +8,6 @@ export default class State {
 
 		this.board = board.map(row => row.slice(0))
 	}
-
-	score() {
-		if (this.isTerminal()) {
-			if (this.winner === "player") {
-				return 10 - this.aiMovesCount
-			} else if (this.winner === "computer") {
-				return -10 + this.aiMovesCount
-			} else {
-				return 0
-			}
-		}
-	}
-
-	// transfer(aiMovesCount, turn, terminal, board) {
-
-	// 	return this
-	// }
 
 	nextTurn() {
 		this.turn = this.turn === "X" ? "O" : "X";
@@ -67,11 +49,11 @@ export default class State {
 		}
 
 		//check diagonals
-		if (B[0][0] === piece && B[1][1] === B[0][0] && B[2][2] === B[0][0]) {
+		if (B[0][0] === piece && B[1][1] === piece && B[2][2] === piece) {
 			this.winner = B[0][0]
 			return true
 		}
-		if (B[0][2] === piece && B[1][1] === B[0][2] && B[2][0] === B[0][2]) {
+		if (B[0][2] === piece && B[1][1] === piece && B[2][0] === piece) {
 			this.winner = B[0][2]
 			return true
 		}

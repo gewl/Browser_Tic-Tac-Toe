@@ -6,7 +6,6 @@ import State from './state.js'
 // https://mostafa-samir.github.io/Tic-Tac-Toe-AI/
 
 function gameScore(state) {
-	if (state.terminal) {
 		if (state.winner === "player") {
 			return 10 - state.aiMovesCount
 		} else if (state.winner === "computer") {
@@ -14,7 +13,6 @@ function gameScore(state) {
 		} else {
 			return 0
 		}
-	}
 }
 
 export default class AI {
@@ -23,7 +21,6 @@ export default class AI {
 	}
 
 	getMinimaxValue(state) {
-		console.log(state.board)
 		if (state.isTerminal()) {
 			return gameScore(state)
 		} else {
@@ -67,7 +64,6 @@ export default class AI {
 
 	move() {
 		let currentState = new State(0, "O", false, this.board)
-		// console.log(this.board)
 
 		let availableCells = currentState.getEmptyCells()
 
@@ -83,9 +79,9 @@ export default class AI {
 		})
 
 		if (currentState.turn === "X") {
-			availableActions.sort(AIAction.sortDescending)		
+			availableActions.sort(sortDescending)		
 		} else {
-			availableActions.sort(AIAction.sortAscending)		
+			availableActions.sort(sortAscending)		
 		}
 
 		let chosenAction = {
@@ -123,24 +119,24 @@ export class AIAction {
 
 		return next;
 	}
+}
 
-	sortAscending (firstAction, secondAction) {
-		if (firstAction.minimaxVal < secondAction.minimaxVal) {
-			return -1 // benefits O
-		} else if (firstAction.minimaxVal > secondAction.minimaxVal) {
-			return 1  // benefits X
-		} else {
-			return 0 // draw
-		}
+function sortAscending (firstAction, secondAction) {
+	if (firstAction.minimaxVal < secondAction.minimaxVal) {
+		return -1 // benefits O
+	} else if (firstAction.minimaxVal > secondAction.minimaxVal) {
+		return 1  // benefits X
+	} else {
+		return 0 // draw
 	}
+}
 
-	sortDescending (firstAction, secondAction) {
-		if (firstAction.minimaxVal > secondAction.minimaxVal) {
-			return -1 // benefits X
-		} else if (firstAction.minimaxVal < secondAction.minimaxVal) {
-			return 1  // benefits O
-		} else {
-			return 0 // draw
-		}
+function sortDescending (firstAction, secondAction) {
+	if (firstAction.minimaxVal > secondAction.minimaxVal) {
+		return -1 // benefits X
+	} else if (firstAction.minimaxVal < secondAction.minimaxVal) {
+		return 1  // benefits O
+	} else {
+		return 0 // draw
 	}
 }

@@ -48,7 +48,7 @@ gulp.task('watch', function() {
 		runSeq('browserify', 'reload');
 	});
 	gulp.watch('server/**/*.js', ['lintJS']);
-	gulp.watch(['./public/index.html'], ['reload']);
+	gulp.watch(['./public/index.html', './public/main.css'], ['reload']);
 })
 
 gulp.task('default', ['lintJS', 'browserify', 'watch'], function() {})

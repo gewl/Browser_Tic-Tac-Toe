@@ -22,7 +22,8 @@ export default class Board {
 			let mouse = this.getMouse(e)
 		})
 
-		document.body.appendChild(canvas);
+		let stretcher = document.getElementById("stretcher")
+		stretcher.appendChild(canvas);
 	}
 
 	getMouse(event) {
@@ -81,15 +82,16 @@ export default class Board {
 	}
 
 	writeText(text) {
-		let { ctx } = this
+		let { ctx, boardWidth } = this
+		let dim = boardWidth/2
+		ctx.textAlign = 'center'
 		ctx.font = '72px Helvetica'
 		ctx.fillStyle = 'white'
 		ctx.strokeStyle = 'black'
-		ctx.fillText(text, 100, 240)
-		ctx.strokeText(text, 100, 240)
+		ctx.fillText(text, dim, dim)
+		ctx.strokeText(text, dim, dim)
 		ctx.fill()
 		ctx.stroke()
-		var text = ctx.measureText(text)
 	}
 
 	render() {
