@@ -16,11 +16,6 @@ export default class SocketServer {
 		console.log(`Socket connected: ${socket.id}`);
 		socket.emit('gameStart')
 
-		// array holding winning moves, highest priority
-		let movesToWin = []
-		// array holding desirable moves + associated winning moves, second-highest priority
-		let desirableMoves = []
-
 		socket.on('clientPassState', state => {
 			let ai = new AI(state)	
 			let moveCoords = ai.move()

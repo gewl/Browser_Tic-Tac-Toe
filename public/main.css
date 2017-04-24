@@ -21,3 +21,38 @@ h3 {
 	margin-left: 180px;
 	margin-top: 30px;
 }
+
+#button-panel {
+	height: 50px;
+	width: 470px;
+	padding: 0px;
+	margin-top: 15px;
+}
+
+#reset {
+	border: 1px solid black;
+	height: 29px;
+	padding: 5px;
+	padding-top: 15px;
+	width: 220px;
+	float: left;
+	text-align: center;
+}
+
+#feedback {
+	border: 1px solid black;
+	height: 29px;
+	padding: 5px;
+	padding-top: 15px;
+	width: 220px;
+	float: right;
+	text-align: center;
+}
+
+.loading {
+	background-color: yellow;
+}
+
+.ready {
+	background-color: limegreen;
+}

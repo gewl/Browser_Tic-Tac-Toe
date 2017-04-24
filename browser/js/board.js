@@ -23,7 +23,8 @@ export default class Board {
 		})
 
 		let stretcher = document.getElementById("stretcher")
-		stretcher.appendChild(canvas);
+		this.stretcher = stretcher
+		stretcher.prepend(canvas);
 	}
 
 	getMouse(event) {
@@ -110,6 +111,6 @@ export default class Board {
 	}
 
 	deleteBoard() {
-		document.body.removeChild(this.canvas)
+		stretcher.removeChild(this.canvas)
 	}
 }

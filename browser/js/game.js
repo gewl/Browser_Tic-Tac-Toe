@@ -3,6 +3,19 @@ import Socket from './socket';
 
 export default class Game {
 	constructor(socketInstance) {
+		this.socket = new Socket(socketInstance, this);
+		this.handleWin = this.handleWin.bind(this)
+		this.handleDraw = this.handleDraw.bind(this)
+
+		this._init()
+
+		let board = new Board()
+		board.passGame(this)
+		board.drawBoard()
+		this.board = board
+	}
+
+	_init() {
 		// empty board
 		this.gameState = [
 			[ null, null, null ],
@@ -10,21 +23,11 @@ export default class Game {
 			[ null, null, null ]
 		]
 
-		this.socket = new Socket(socketInstance, this);
-
-		let board = new Board()
-		board.passGame(this)
-		board.drawBoard()
-
 		this.playerPiece = "X"
 		this.computerPiece = this.playerPiece === "X" ? "O" : "X"
 		this.isPlayerTurn = true
-		this.board = board
 		this.gameOver = false;
-
-		this.handleWin = this.handleWin.bind(this)
-		this.handleDraw = this.handleDraw.bind(this)
-	}
+	 }
 
 	getState() {
 		return this.gameState
